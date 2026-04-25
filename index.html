@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Force light color scheme — prevents iOS dark mode from darkening transparent sections -->
+  <meta name="color-scheme" content="light">
+  <title>Lexnavigator Law Group — Адвокатське бюро</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       TOKENS
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      color-scheme: light;          /* prevents iOS/Safari dark mode inversion */
+      --paper:       #faf7f1;
+      --paper-soft:  #f3ede2;
+      --paper-deep:  #ebe3d3;
+      --navy:        #1e2e4d;
+      --navy-mid:    #2a3e5f;
+      --navy-soft:   #3a527a;
+      --ink:         #13202f;
+      --gold:        #bba478;
+      --gold-deep:   #9e8858;
+      --gold-warm:   #d4b980;
+      --line:        rgba(30, 46, 77, 0.10);
+      --line-strong: rgba(30, 46, 77, 0.20);
+      --serif:       'Cormorant Garamond', 'Georgia', serif;
+      --sans:        'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { background: var(--paper); scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      font-size: 15px; font-weight: 400;
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--paper);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── LAYOUT PRIMITIVES ─────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    .section   { padding: 120px 0; position: relative; }
+    .rule      { height: 1px; background: var(--line); }
+    .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+
+    /* ─── TYPOGRAPHY ─────────────────────────────────── */
+    .smallcaps { font-variant: small-caps; letter-spacing: 0.12em; }
+    .eyebrow {
+      font-family: var(--sans); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--gold-deep);
+    }
+    .display {
+      font-family: var(--serif); font-weight: 400;
+      color: var(--navy); letter-spacing: 0.005em;
+      line-height: 1.05;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAV — тонкая горизонтальная, прозрачная
+       ═══════════════════════════════════════════════════════════ */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      background: rgba(250,247,241,0.78);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease, padding 0.3s ease, background 0.3s ease;
+    }
+    #nav.scrolled {
+      padding: 12px 0;
+      border-bottom-color: var(--line);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--navy);
+      flex-shrink: 0;
+    }
+    /* Only the shield-L in nav brand */
+    .nav-brand img {
+      height: 38px; width: auto; display: block;
+      transition: transform 0.4s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .nav-brand:hover img { transform: scale(1.05) rotate(-2deg); }
+    .nav-brand-text {
+      font-family: var(--serif); font-weight: 500;
+      font-size: 19px; letter-spacing: 0.04em;
+      color: var(--navy); line-height: 1;
+      font-variant: small-caps;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link {
+      font-family: var(--sans); font-size: 13px; font-weight: 500;
+      color: var(--navy-mid);
+      text-decoration: none; padding: 6px 0;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .nav-link::after {
+      content: ""; position: absolute;
+      bottom: 0; left: 0; width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.4s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .nav-link:hover { color: var(--navy); }
+    .nav-link:hover::after { width: 100%; }
+
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    .lang-sep {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--sans); font-size: 11px; font-weight: 500;
+      letter-spacing: 0.14em;
+    }
+    .lang-sep button {
+      background: none; border: none;
+      color: rgba(30,46,77,0.35);
+      padding: 4px 2px;
+      transition: color 0.2s ease;
+    }
+    .lang-sep button.on { color: var(--navy); }
+    .lang-sep button:hover { color: var(--navy-mid); }
+    .lang-sep .div { color: rgba(30,46,77,0.2); }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      width: 28px; height: 20px;
+      background: transparent; border: none;
+      position: relative;
+    }
+    .hamburger span {
+      position: absolute; left: 0; right: 0;
+      height: 1.5px; background: var(--navy);
+      transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .hamburger span:nth-child(1) { top: 3px; }
+    .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); width: 20px; }
+    .hamburger span:nth-child(3) { bottom: 3px; }
+    body.menu-open .hamburger span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+    body.menu-open .hamburger span:nth-child(2) { opacity: 0; }
+    body.menu-open .hamburger span:nth-child(3) { bottom: 50%; transform: translateY(50%) rotate(-45deg); width: 100%; }
+
+    /* Mobile menu overlay */
+    #mobile-menu {
+      position: fixed; inset: 0;
+      background: var(--paper);
+      z-index: 90;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none;
+      transform: scale(0.98);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    body.menu-open #mobile-menu { opacity: 1; pointer-events: auto; transform: none; }
+    #mobile-menu a {
+      font-family: var(--serif); font-weight: 400;
+      font-size: 36px; font-variant: small-caps;
+      letter-spacing: 0.05em;
+      color: var(--navy);
+      text-decoration: none;
+      padding: 12px 0;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2,0.8,0.2,1), color 0.3s ease;
+    }
+    body.menu-open #mobile-menu a { opacity: 1; transform: none; }
+    body.menu-open #mobile-menu a:nth-child(1) { transition-delay: 0.10s; }
+    body.menu-open #mobile-menu a:nth-child(2) { transition-delay: 0.18s; }
+    body.menu-open #mobile-menu a:nth-child(3) { transition-delay: 0.26s; }
+    body.menu-open #mobile-menu a:nth-child(4) { transition-delay: 0.34s; }
+    #mobile-menu a:hover { color: var(--gold-deep); }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════ */
+    #hero {
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 140px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(900px 550px at 50% 40%, rgba(187,164,120,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Shield only — stays proportionate. Floats subtly. */
+    .hero-shield {
+      display: inline-block;
+      margin-bottom: 48px;
+      animation: floatShield 6s ease-in-out infinite;
+    }
+    .hero-shield img {
+      height: 120px; width: auto;
+      filter: drop-shadow(0 14px 30px rgba(30,46,77,0.18));
+    }
+    @keyframes floatShield {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    /* Wordmark — large text name */
+    .hero-wordmark {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(44px, 7vw, 92px);
+      font-variant: small-caps;
+      letter-spacing: 0.08em;   /* increased per spec for logotype presence */
+      line-height: 1;
+      color: var(--navy);
+      margin-bottom: 18px;
+      display: block;
+    }
+    .hero-wordmark .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.2,0.8,0.2,1),
+                  transform 0.9s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .hero-wordmark.in .word { opacity: 1; transform: none; }
+    .hero-wordmark.in .word:nth-child(1) { transition-delay: 0.10s; }
+    .hero-wordmark.in .word:nth-child(2) { transition-delay: 0.20s; }
+    .hero-wordmark.in .word:nth-child(3) { transition-delay: 0.30s; }
+
+    /* Slogan under wordmark */
+    .hero-slogan {
+      font-family: var(--sans);
+      font-size: clamp(11px, 1vw, 13px);
+      font-weight: 500;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      margin-bottom: 48px;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 16px;
+    }
+    .hero-slogan::before, .hero-slogan::after {
+      content: ""; width: 32px; height: 1px;
+      background: var(--gold-deep); opacity: 0.5;
+    }
+
+    .hero-lead {
+      font-family: var(--serif);
+      font-style: italic; font-weight: 300;
+      font-size: clamp(18px, 1.8vw, 22px);
+      line-height: 1.65;
+      color: var(--navy-mid);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 28px;
+      font-family: var(--sans); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      text-decoration: none; border: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .btn-primary {
+      background: var(--navy); color: var(--paper);
+      border: 1px solid var(--navy);
+    }
+    .btn-primary:hover {
+      background: var(--ink);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 30px rgba(30,46,77,0.22);
+    }
+    .btn-ghost {
+      background: transparent; color: var(--navy);
+      border: 1px solid var(--line-strong);
+    }
+    .btn-ghost:hover {
+      border-color: var(--navy);
+      background: rgba(30,46,77,0.03);
+    }
+    .btn-arrow {
+      font-family: var(--serif); font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--sans); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--gold-deep); opacity: 0.7;
+    }
+    .scroll-cue::after {
+      content: ""; display: block;
+      width: 1px; height: 32px; margin: 12px auto 0;
+      background: linear-gradient(180deg, var(--gold), transparent);
+      animation: scrollLine 2.4s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { height: 32px; opacity: 0.5; }
+      50%      { height: 44px; opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MARQUEE — бесконечный скролл с наградами
+       ═══════════════════════════════════════════════════════════ */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 0;
+      background: var(--paper-soft);
+      position: relative;
+    }
+    .marquee-wrap::before, .marquee-wrap::after {
+      content: ""; position: absolute; top: 0; bottom: 0;
+      width: 80px; z-index: 2; pointer-events: none;
+    }
+    .marquee-wrap::before { left: 0; background: linear-gradient(90deg, var(--paper-soft), transparent); }
+    .marquee-wrap::after  { right: 0; background: linear-gradient(270deg, var(--paper-soft), transparent); }
+
+    .marquee {
+      display: flex; gap: 56px;
+      animation: marquee 40s linear infinite;
+      width: fit-content;
+    }
+    .marquee-item {
+      display: flex; align-items: center;
+      flex-shrink: 0;
+      height: 28px;
+      transition: opacity 0.4s ease, filter 0.4s ease;
+      opacity: 0.20;
+      /* Muted white/navy: use the navy color filtered to look desaturated-white on navy,
+         or just use currentColor which inherits navy on cream pages */
+      color: var(--navy);
+    }
+    .marquee-item:hover {
+      opacity: 1;
+      color: var(--gold-deep);
+    }
+    .marquee-item svg {
+      height: 100%; width: auto; display: block;
+      fill: currentColor;
+    }
+    /* Diamond separators between items for cadence */
+    .marquee-item + .marquee-item::before {
+      content: "◆";
+      color: var(--gold);
+      font-size: 7px;
+      margin-right: 56px;
+      opacity: 0.8;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .marquee { animation: none; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       REVIEWS — премиум карусель (под heroes, до UVP)
+       ═══════════════════════════════════════════════════════════ */
+    #reviews {
+      padding: 120px 0 100px;
+      background: var(--navy);
+      color: var(--paper);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Subtle gold accent at top */
+    #reviews::before {
+      content: ""; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 2px;
+      background: var(--gold);
+    }
+    /* Giant letter watermark */
+    #reviews::after {
+      content: """;
+      position: absolute;
+      top: -80px; right: -20px;
+      font-family: var(--serif);
+      font-size: 42vw;
+      color: var(--paper);
+      opacity: 0.03;
+      line-height: 1;
+      font-style: normal;
+      pointer-events: none;
+      font-weight: 400;
+    }
+
+    .reviews-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 32px;
+      position: relative; z-index: 2;
+    }
+
+    .reviews-head {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .reviews-head .eyebrow {
+      color: var(--gold-warm);
+    }
+    .reviews-head h2 {
+      font-family: var(--serif); font-weight: 400;
+      font-variant: small-caps;
+      font-size: clamp(38px, 5vw, 62px);
+      letter-spacing: 0.03em;
+      color: var(--paper);
+      line-height: 1.1;
+      margin: 16px 0 0;
+    }
+    .reviews-head h2 em {
+      font-style: italic; color: var(--gold-warm);
+      font-variant: normal;
+    }
+
+    /* ── Peek carousel — multiple cards visible, center highlighted ── */
+    .rv-track {
+      overflow: hidden;
+      padding: 36px 0;
+      margin: 0 -32px;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    }
+    .rv-slides {
+      display: flex;
+      gap: 20px;
+      transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+      /* Center the active card — padding = (container - card) / 2 */
+      padding: 0 calc(50% - 170px);
+      touch-action: pan-y;
+      user-select: none;
+    }
+
+    .rv-slide {
+      flex: 0 0 340px;
+      opacity: 0.32;
+      transform: scale(0.94);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2,0.8,0.2,1);
+      cursor: pointer;
+    }
+    .rv-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      cursor: default;
+    }
+    .rv-slide.adjacent { opacity: 0.55; }
+
+    .rv-card {
+      background: rgba(250,247,241,0.05);
+      border: 1px solid rgba(250,247,241,0.10);
+      border-radius: 18px;
+      padding: 36px 30px;
+      text-align: center;
+      min-height: 420px;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative;
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+    /* Active card: cream background, gold corners, strong shadow */
+    .rv-slide.active .rv-card {
+      background: var(--paper);
+      border-color: transparent;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(187,164,120,0.18);
+    }
+    .rv-slide.active .rv-card::before,
+    .rv-slide.active .rv-card::after {
+      content: "";
+      position: absolute;
+      width: 20px; height: 20px;
+    }
+    .rv-slide.active .rv-card::before {
+      top: 14px; left: 14px;
+      border-top: 1px solid var(--gold);
+      border-left: 1px solid var(--gold);
+    }
+    .rv-slide.active .rv-card::after {
+      bottom: 14px; right: 14px;
+      border-bottom: 1px solid var(--gold);
+      border-right: 1px solid var(--gold);
+    }
+
+    .rv-avatar {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(212,185,128,0.3), rgba(187,164,120,0.10));
+      border: 1px solid rgba(212,185,128,0.4);
+      display: grid; place-items: center;
+      margin-bottom: 16px;
+      font-family: var(--serif);
+      font-style: italic; font-weight: 400;
+      font-size: 19px;
+      color: var(--gold-warm);
+      flex-shrink: 0;
+    }
+    .rv-slide.active .rv-avatar {
+      background: linear-gradient(135deg, rgba(187,164,120,0.22), rgba(158,136,88,0.08));
+      border-color: rgba(158,136,88,0.45);
+      color: var(--gold-deep);
+    }
+
+    .rv-stars {
+      display: flex; justify-content: center; gap: 2px;
+      margin-bottom: 16px;
+    }
+    .rv-stars svg { width: 12px; height: 12px; fill: var(--gold-warm); }
+    .rv-slide.active .rv-stars svg { fill: var(--gold-deep); }
+
+    .rv-quote {
+      font-family: var(--serif);
+      font-weight: 300; font-style: italic;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--paper);
+      margin-bottom: 20px;
+      flex: 1;
+    }
+    .rv-slide.active .rv-quote {
+      color: var(--navy);
+      font-size: 17px;
+    }
+    .rv-attr {
+      font-family: var(--sans);
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold-warm);
+    }
+    .rv-slide.active .rv-attr { color: var(--gold-deep); }
+    .rv-attr-sub {
+      font-family: var(--sans);
+      font-size: 10.5px; font-weight: 400;
+      color: rgba(250,247,241,0.5);
+      letter-spacing: 0.02em;
+      margin-top: 4px;
+    }
+    .rv-slide.active .rv-attr-sub {
+      color: var(--navy-mid);
+      opacity: 0.7;
+    }
+
+    /* Circular navigation — matches reference */
+    .rv-nav {
+      display: flex; justify-content: center; align-items: center;
+      gap: 14px; margin-top: 20px;
+    }
+    .rv-btn {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: transparent;
+      border: 1.5px solid rgba(250,247,241,0.35);
+      color: var(--paper);
+      display: grid; place-items: center;
+      transition: all 0.3s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .rv-btn:hover,
+    .rv-btn.primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+      transform: scale(1.05);
+    }
+    .rv-btn.primary { transform: scale(1.1); }
+    .rv-dots {
+      display: flex; gap: 6px; margin: 0 8px;
+    }
+    .rv-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(250,247,241,0.25);
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .rv-dot.on {
+      width: 24px; border-radius: 3px;
+      background: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       UVP — числа с animated counters
+       ═══════════════════════════════════════════════════════════ */
+    #uvp-section {
+      padding: 100px 0;
+      position: relative;
+    }
+    .uvp-head {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .uvp-head h3 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(28px, 3.2vw, 40px);
+      font-variant: small-caps;
+      letter-spacing: 0.03em;
+      color: var(--navy);
+    }
+    .uvp-head h3 em {
+      font-style: italic; color: var(--gold-deep);
+      font-variant: normal;
+    }
+
+    .uvp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .uvp-cell {
+      padding: 48px 32px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+      position: relative;
+      transition: background 0.4s ease;
+    }
+    .uvp-cell:last-child { border-right: none; }
+    .uvp-cell:hover {
+      background: var(--paper-soft);
+    }
+    .uvp-cell::before {
+      content: "";
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.5s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .uvp-cell:hover::before { width: 100%; }
+
+    .uvp-num {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+    .uvp-num em {
+      font-style: italic;
+      color: var(--gold-deep);
+    }
+    .uvp-num .suffix {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--gold-deep);
+    }
+    .uvp-label {
+      font-family: var(--sans);
+      font-size: 10.5px; font-weight: 500;
+      letter-spacing: 0.20em; text-transform: uppercase;
+      color: var(--navy-mid);
+      margin-top: 14px;
+      opacity: 0.78;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       EXPERTISE
+       ═══════════════════════════════════════════════════════════ */
+    .sec-head {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .sec-head h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-variant: small-caps;
+      font-size: clamp(36px, 4.5vw, 56px);
+      letter-spacing: 0.03em;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+    .sec-head h2 em {
+      font-style: italic;
+      color: var(--gold-deep);
+      font-variant: normal;
+    }
+    .sec-head .sec-lead {
+      font-family: var(--serif);
+      font-style: italic; font-weight: 300;
+      font-size: 18px; line-height: 1.65;
+      color: var(--navy-mid);
+      max-width: 580px;
+      margin: 24px auto 0;
+    }
+    .sec-head .gold-rule {
+      width: 40px;
+      margin: 16px auto 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       EXPERTISE — 6 editorial cards with icon + expand-to-modal
+       ═══════════════════════════════════════════════════════════ */
+    .ex-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .ex-item {
+      position: relative;
+      padding: 32px 28px 28px;
+      background: var(--paper-soft);
+      border: 1px solid transparent;
+      border-radius: 20px;
+      display: flex; flex-direction: column;
+      transition:
+        background 0.4s ease,
+        border-color 0.4s ease,
+        transform 0.4s cubic-bezier(0.2,0.8,0.2,1),
+        box-shadow 0.4s ease;
+      cursor: pointer;
+      min-height: 280px;
+    }
+    .ex-item:hover {
+      background: var(--paper);
+      border-color: rgba(187,164,120,0.35);
+      transform: translateY(-3px);
+      box-shadow:
+        0 4px 16px rgba(30,46,77,0.06),
+        0 20px 48px rgba(30,46,77,0.08);
+    }
+
+    /* Icon: gold-tinted circle, top-left */
+    .ex-icon {
+      width: 48px; height: 48px;
+      flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(187,164,120,0.12);
+      border: 1px solid rgba(187,164,120,0.25);
+      color: var(--gold-deep);
+      margin-bottom: 22px;
+      transition: all 0.3s ease;
+    }
+    .ex-item:hover .ex-icon {
+      background: rgba(187,164,120,0.20);
+      border-color: rgba(187,164,120,0.5);
+      transform: scale(1.06);
+    }
+    .ex-icon svg {
+      width: 22px; height: 22px;
+      stroke-width: 1.5;
+    }
+
+    .ex-title {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.005em;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .ex-desc {
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--navy-mid);
+      opacity: 0.80;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+    .ex-more {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--sans);
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      background: none; border: none; padding: 0;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.3s ease, gap 0.3s ease;
+    }
+    .ex-more:hover {
+      color: var(--gold-deep);
+      gap: 12px;
+    }
+    .ex-more .arrow {
+      font-family: var(--serif);
+      font-size: 15px;
+      transition: transform 0.3s ease;
+    }
+    .ex-more:hover .arrow { transform: translateX(2px); }
+
+    /* ═══════════════════════════════════════════════════════════
+       CONTACT — info слева, map справа (меньше)
+       ═══════════════════════════════════════════════════════════ */
+    #contact {
+      padding: 100px 0 120px;
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 48px;
+      align-items: stretch;
+    }
+    .contact-info {
+      display: flex; flex-direction: column;
+      gap: 4px;
+      padding: 8px 0;
+    }
+    .contact-row {
+      display: flex; gap: 18px; align-items: flex-start;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-row-icon {
+      width: 44px; height: 44px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(187,164,120,0.08);
+      border: 1px solid rgba(187,164,120,0.25);
+      display: grid; place-items: center;
+      color: var(--gold-deep);
+    }
+    .contact-row-body { flex: 1; padding-top: 3px; }
+    .contact-row-label {
+      font-family: var(--sans);
+      font-size: 9.5px; font-weight: 600;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--navy-mid); opacity: 0.6;
+      margin-bottom: 4px;
+    }
+    .contact-row-value {
+      font-family: var(--serif);
+      font-weight: 400; font-size: 18px;
+      color: var(--navy); line-height: 1.4;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: block;
+    }
+    a.contact-row-value:hover { color: var(--gold-deep); }
+
+    .contact-map-small {
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      overflow: hidden;
+      min-height: 380px;
+    }
+    .contact-map-small iframe {
+      width: 100%; height: 100%; min-height: 380px;
+      border: 0; display: block;
+      filter: grayscale(35%) saturate(85%);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    footer {
+      background: var(--navy);
+      color: rgba(250,247,241,0.7);
+      padding: 64px 0 32px;
+      position: relative;
+    }
+    footer::before {
+      content: ""; position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 2px; background: var(--gold);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(250,247,241,0.08);
+    }
+    .footer-brand-text {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      color: var(--paper);
+      margin-bottom: 12px;
+    }
+    .footer-brand-sub {
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 0.20em; text-transform: uppercase;
+      color: rgba(250,247,241,0.4);
+      margin-bottom: 20px;
+    }
+    .footer-descr {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 15px;
+      color: rgba(250,247,241,0.6);
+      line-height: 1.6;
+      max-width: 320px;
+    }
+    .footer-col-title {
+      font-family: var(--sans);
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--gold-warm);
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: rgba(250,247,241,0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-col a:hover { color: var(--gold-warm); }
+    .footer-bottom {
+      padding-top: 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--sans);
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(250,247,241,0.4);
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FLOATING CTA — magnetic
+       ═══════════════════════════════════════════════════════════ */
+    #cta {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      z-index: 80;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 22px 14px 18px;
+      background: var(--navy);
+      color: var(--paper);
+      border-radius: 999px;
+      font-family: var(--sans); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+      /* Soft glow: large blur, low opacity, slight gold warmth */
+      box-shadow:
+        0 4px 16px rgba(30,46,77,0.08),
+        0 20px 60px rgba(30,46,77,0.10),
+        0 0 40px rgba(187,164,120,0.06);
+      transition:
+        transform 0.18s cubic-bezier(0.2,0.8,0.2,1),
+        box-shadow 0.4s ease,
+        background 0.3s ease;
+    }
+    #cta:hover {
+      background: var(--ink);
+      box-shadow:
+        0 6px 20px rgba(30,46,77,0.10),
+        0 28px 80px rgba(30,46,77,0.14),
+        0 0 60px rgba(187,164,120,0.12);
+    }
+    #cta-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold-warm);
+      box-shadow: 0 0 8px var(--gold-warm);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50%      { opacity: 1; box-shadow: 0 0 14px var(--gold-warm); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       REVEAL
+       ═══════════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s cubic-bezier(0.2,0.8,0.2,1),
+                  transform 0.9s cubic-bezier(0.2,0.8,0.2,1);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal.delay-1 { transition-delay: 0.10s; }
+    .reveal.delay-2 { transition-delay: 0.20s; }
+    .reveal.delay-3 { transition-delay: 0.30s; }
+    .reveal.delay-4 { transition-delay: 0.40s; }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODAL SYSTEM — .is-open class pattern
+       One class rules all: overlay dim+blur, card scale, depth shift
+       ═══════════════════════════════════════════════════════════ */
+
+    /* Site content depth-shift — scales back when any modal opens */
+    #site-content {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: center center;
+      will-change: transform;
+    }
+    body.modal-open #site-content {
+      transform: scale(0.98);
+    }
+    body.modal-open { overflow: hidden; }
+
+    /* Shared overlay base */
+    #consult-overlay,
+    #ex-overlay {
+      position: fixed; inset: 0;
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      pointer-events: none;
+      /* Progressive backdrop — animates FROM transparent/no-blur */
+      background: transparent;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      transition:
+        background      0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        -webkit-backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #consult-overlay.is-open,
+    #ex-overlay.is-open {
+      pointer-events: auto;
+      background: rgba(31, 48, 68, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Consultation card */
+    .consult-card {
+      width: 100%; max-width: 520px;
+      background: var(--paper);
+      border-radius: 20px;
+      padding: 40px 40px 32px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        0 8px 24px rgba(0,0,0,0.08),
+        0 28px 72px rgba(0,0,0,0.16),
+        0 0 0 1px rgba(187,164,120,0.15);
+      position: relative;
+      /* Start: invisible + slightly smaller */
+      opacity: 0;
+      transform: scale(0.95);
+      transition:
+        opacity   0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #consult-overlay.is-open .consult-card {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Content inside fades in with slight delay — no text soup during scale */
+    .consult-content {
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: 0s;
+    }
+    #consult-overlay.is-open .consult-content {
+      opacity: 1;
+      transition-delay: 0.15s;
+    }
+
+    /* Form fields stagger in after card is visible */
+    .consult-field {
+      position: relative; display: flex; flex-direction: column;
+      opacity: 0; transform: translateY(6px);
+      transition:
+        opacity   0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #consult-overlay.is-open .consult-field               { opacity: 1; transform: none; }
+    #consult-overlay.is-open .consult-field:nth-of-type(1){ transition-delay: 0.22s; }
+    #consult-overlay.is-open .consult-field:nth-of-type(2){ transition-delay: 0.28s; }
+    #consult-overlay.is-open .consult-field:nth-of-type(3){ transition-delay: 0.34s; }
+    #consult-overlay.is-open .consult-field:nth-of-type(4){ transition-delay: 0.40s; }
+    #consult-overlay.is-open .consult-submit              { transition-delay: 0.46s; }
+    /* Subtle gold top accent */
+    .consult-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 48px; height: 2px;
+      background: var(--gold);
+      border-radius: 0 0 2px 2px;
+    }
+
+    .consult-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--navy-mid);
+      display: grid; place-items: center;
+      transition: all 0.3s ease;
+    }
+    .consult-close:hover {
+      background: var(--navy); color: var(--paper);
+      border-color: var(--navy);
+      transform: rotate(90deg);
+    }
+
+    .consult-head {
+      text-align: center;
+      margin-bottom: 28px;
+      padding: 0 16px;
+    }
+    .consult-head h3 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-variant: small-caps;
+      font-size: clamp(26px, 3.2vw, 34px);
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      color: var(--navy);
+    }
+    .consult-head h3 em {
+      font-style: italic; color: var(--gold-deep);
+      font-variant: normal;
+    }
+    .consult-head p {
+      font-family: var(--serif);
+      font-style: italic; font-weight: 300;
+      font-size: 14px; line-height: 1.5;
+      color: var(--navy-mid);
+      margin-top: 10px;
+      max-width: 360px; margin-left: auto; margin-right: auto;
+    }
+
+    .consult-form {
+      display: flex; flex-direction: column;
+      gap: 16px;
+    }
+    .consult-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .consult-field {
+      position: relative;
+      display: flex; flex-direction: column;
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .consult-label {
+      font-family: var(--sans);
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--navy-mid); opacity: 0.6;
+      margin-bottom: 6px;
+    }
+    .consult-input, .consult-textarea {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 15px; font-weight: 400;
+      color: var(--navy);
+      background: rgba(30,46,77,0.03);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+    .consult-textarea {
+      resize: vertical; min-height: 80px;
+      line-height: 1.5;
+      font-family: var(--sans);
+    }
+    .consult-input:focus, .consult-textarea:focus {
+      background: var(--paper);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(187,164,120,0.15);
+    }
+    .consult-input::placeholder, .consult-textarea::placeholder {
+      color: rgba(30,46,77,0.35);
+    }
+
+    .consult-submit {
+      margin-top: 12px;
+      padding: 14px 22px;
+      background: var(--navy);
+      color: var(--paper);
+      border: none; border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+        background 0.3s ease, box-shadow 0.3s ease;
+    }
+    #consult-overlay.is-open .consult-submit { opacity: 1; transform: none; }
+    .consult-submit:hover {
+      background: var(--ink);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(30,46,77,0.25);
+    }
+    .consult-submit.success {
+      background: #2a7f5e;
+    }
+
+    .consult-meta {
+      text-align: center;
+      margin-top: 16px;
+      font-family: var(--sans);
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--navy-mid); opacity: 0.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════════
+       EXPERTISE DETAIL MODAL — same .is-open system
+       ═══════════════════════════════════════════════════════════ */
+
+    /* Expertise card */
+    .ex-card-modal {
+      width: 100%; max-width: 620px;
+      max-height: 88vh;
+      background: var(--paper);
+      border-radius: 22px;
+      padding: 44px 44px 36px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        0 8px 24px rgba(0,0,0,0.08),
+        0 28px 72px rgba(0,0,0,0.16),
+        0 0 0 1px rgba(187,164,120,0.15);
+      position: relative;
+      overflow-y: auto;
+      opacity: 0;
+      transform: scale(0.95);
+      transition:
+        opacity   0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #ex-overlay.is-open .ex-card-modal {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Content inside fades after card starts expanding */
+    .ex-modal-content {
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: 0s;
+    }
+    #ex-overlay.is-open .ex-modal-content {
+      opacity: 1;
+      transition-delay: 0.15s;
+    }
+
+    /* Gold top accent bar */
+    .ex-card-modal::before {
+      content: "";
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 48px; height: 2px;
+      background: var(--gold);
+      border-radius: 0 0 2px 2px;
+    }
+
+    /* Close button */
+    .ex-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--navy-mid);
+      display: grid; place-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    .ex-close:hover {
+      background: var(--navy); color: var(--paper);
+      border-color: var(--navy);
+      transform: rotate(90deg);
+    }
+
+    .ex-modal-icon {
+      width: 56px; height: 56px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(187,164,120,0.15);
+      border: 1px solid rgba(187,164,120,0.35);
+      color: var(--gold-deep);
+      margin-bottom: 20px;
+    }
+    .ex-modal-icon svg {
+      width: 26px; height: 26px;
+      stroke-width: 1.5;
+    }
+    .ex-modal-title {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(26px, 3.2vw, 34px);
+      line-height: 1.18;
+      color: var(--navy);
+      margin-bottom: 16px;
+      letter-spacing: 0.005em;
+    }
+    .ex-modal-body {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--navy-mid);
+    }
+    .ex-modal-body p { margin-bottom: 14px; }
+    .ex-modal-body ul {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    .ex-modal-body li {
+      padding: 8px 0 8px 22px;
+      position: relative;
+      font-size: 14.5px;
+    }
+    .ex-modal-body li::before {
+      content: "◆";
+      position: absolute;
+      left: 0; top: 10px;
+      color: var(--gold);
+      font-size: 8px;
+    }
+    .ex-modal-cta {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .ex-modal-cta-note {
+      font-family: var(--sans);
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--navy-mid); opacity: 0.65;
+    }
+    .ex-modal-cta button {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px;
+      background: var(--navy);
+      color: var(--paper);
+      border: none; border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .ex-modal-cta button:hover {
+      background: var(--ink);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(30,46,77,0.2);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MOBILE — thumb-friendly, readable, fast
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      /* Mobile default: pure white background per user preference */
+      html, body { background: #ffffff; }
+      #hero { background: #ffffff; }
+      #hero::before {
+        /* Soft warm halo behind shield */
+        background: radial-gradient(700px 450px at 50% 36%, rgba(187,164,120,0.10), transparent 70%);
+      }
+      /* Subtle off-white for secondary sections against white */
+      #uvp-section { background: #fafafa; }
+      .marquee-wrap { background: #f7f4ee; border-color: rgba(30,46,77,0.06); }
+
+      /* Reviews: swap dark navy → light on mobile to fit the white theme */
+      #reviews {
+        background: #f5f1e8;
+        color: var(--navy);
+      }
+      #reviews::after { opacity: 0.04; color: var(--navy); }   /* faint " watermark */
+      .reviews-head .eyebrow { color: var(--gold-deep); }
+      .reviews-head h2 { color: var(--navy); }
+      .reviews-head h2 em { color: var(--gold-deep); }
+      /* Non-active cards become light-gray placeholders */
+      .rv-card {
+        background: rgba(255,255,255,0.55);
+        border-color: rgba(30,46,77,0.08);
+      }
+      .rv-quote { color: var(--navy-mid); }
+      .rv-attr { color: var(--gold-deep); }
+      .rv-attr-sub { color: var(--navy-mid); opacity: 0.6; }
+      /* Active card: crisp white */
+      .rv-slide.active .rv-card { background: #ffffff; }
+      /* Review carousel buttons (navy on light bg) */
+      .rv-btn { color: var(--navy-mid); border-color: rgba(30,46,77,0.20); }
+      .rv-btn:hover, .rv-btn.primary { color: var(--paper); }
+      .rv-dot { background: rgba(30,46,77,0.18); }
+
+      /* Fix: explicit white for all main sections on mobile — prevents dark-mode leakthrough */
+      #contact, #expertise, #uvp-section, .section { background: #ffffff; }
+      /* Fix: hide scroll cue on mobile — it overlaps CTA and section headers */
+      .scroll-cue { display: none; }
+
+      #mobile-menu { background: #ffffff; }
+
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .section, #reviews, #uvp-section, #contact { padding: 72px 0; }
+      .sec-head, .uvp-head, .reviews-head { margin-bottom: 48px; }
+      .ex-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .ex-item { min-height: 240px; padding: 28px 24px; }
+      /* Expertise modal mobile */
+      .ex-card-modal { padding: 36px 28px 28px; max-height: 90vh; }
+      .ex-modal-title { font-size: 24px; }
+      .ex-modal-cta { flex-direction: column; align-items: stretch; }
+      .ex-modal-cta button { width: 100%; justify-content: center; }
+      .uvp-grid { grid-template-columns: repeat(2, 1fr); }
+      .uvp-cell:nth-child(1), .uvp-cell:nth-child(2) {
+        border-bottom: 1px solid var(--line);
+      }
+      .uvp-cell:nth-child(2), .uvp-cell:nth-child(4) { border-right: none; }
+      .uvp-num { font-size: 42px; }
+      /* Contact: stack info above, map below */
+      .contact-layout { grid-template-columns: 1fr; gap: 32px; }
+      .contact-map-small, .contact-map-small iframe { min-height: 320px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+      /* Reviews: slightly narrower cards, center one still stands out */
+      .rv-slide { flex: 0 0 300px; }
+      .rv-slides { padding: 0 calc(50% - 150px); gap: 16px; }
+      .rv-card { min-height: 380px; padding: 32px 24px; }
+      .rv-quote { font-size: 15px; }
+      .rv-slide.active .rv-quote { font-size: 16px; }
+    }
+    @media (max-width: 540px) {
+      .container, .nav-inner { padding: 0 20px; }
+      .hero-shield img { height: 82px; }
+      .hero-wordmark { font-size: clamp(36px, 10vw, 56px); }
+      .hero-slogan { font-size: 10px; letter-spacing: 0.32em; }
+      .hero-slogan::before, .hero-slogan::after { width: 20px; }
+      .hero-lead { font-size: 16px; }
+      .hero-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+      .hero-actions .btn { justify-content: center; width: 100%; }
+      .ex-grid { grid-template-columns: 1fr; gap: 14px; }
+      .ex-item { padding: 28px 22px; min-height: 220px; }
+      .ex-title { font-size: 22px; }
+      .ex-icon { width: 42px; height: 42px; margin-bottom: 18px; }
+      .ex-icon svg { width: 19px; height: 19px; }
+      /* Reviews: single focus card, swipeable */
+      .rv-track { margin: 0 -20px; padding: 24px 0; }
+      .rv-slide { flex: 0 0 80vw; max-width: 320px; }
+      .rv-slides { padding: 0 calc(50vw - 40vw); gap: 14px; }
+      .rv-card { min-height: 340px; padding: 28px 20px; }
+      .rv-avatar { width: 48px; height: 48px; font-size: 18px; }
+      .rv-quote { font-size: 14px; line-height: 1.5; }
+      .rv-slide.active .rv-quote { font-size: 15px; }
+      .rv-btn { width: 44px; height: 44px; }  /* touch target */
+      /* Contact rows: tighter */
+      .contact-row { padding: 18px 0; gap: 14px; }
+      .contact-row-icon { width: 40px; height: 40px; }
+      .contact-row-value { font-size: 16px; }
+      .contact-map-small, .contact-map-small iframe { min-height: 260px; }
+      /* Marquee: smaller font */
+      .marquee-item { font-size: 16px; }
+      .marquee { gap: 36px; }
+      /* Footer */
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      /* Floating CTA */
+      #cta { bottom: 18px; right: 18px; padding: 12px 18px 12px 14px; font-size: 11px; letter-spacing: 0.12em; }
+      /* Section header tweaks */
+      .sec-head h2, .reviews-head h2 { font-size: clamp(32px, 9vw, 48px); }
+      .sec-head .sec-lead { font-size: 16px; }
+      /* Nav: tighter padding on mobile */
+      #nav {
+        padding: 14px 0;
+        background: rgba(255,255,255,0.80);
+      }
+      #nav.scrolled { padding: 10px 0; }
+      .nav-inner { padding: 0 20px; gap: 12px; }
+      .nav-brand img { height: 32px; }
+      .nav-brand-text { font-size: 16px; }
+      .hamburger { width: 24px; height: 18px; }
+      /* Modal */
+      #consult-overlay { padding: 16px; align-items: flex-end; }
+      .consult-card { padding: 28px 22px 22px; border-radius: 20px 20px 16px 16px; max-height: 92vh; overflow-y: auto; }
+      .consult-row { grid-template-columns: 1fr; gap: 16px; }
+      .consult-head { margin-bottom: 22px; padding: 0; }
+      .consult-head h3 { font-size: 26px; }
+      .consult-close { top: 12px; right: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition-duration: 0.01ms !important; }
+      #cta-dot, .hero-shield, .scroll-cue::after { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═════════════ SITE CONTENT — depth-shifts when modal opens ═════════════ -->
+<div id="site-content">
+
+<!-- ═════ NAV ═════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand" aria-label="Lexnavigator home">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDgzIDEyMTAiIGZpbGw9IiMxZTJlNGQiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgPHBhdGggZD0iTSA3ODMuMCA4OTUuNSBMIDczMy4wIDg4MS41IEwgNjcwLjUgODI1LjAgTCAyMjIuNSAyNzEuMCBMIDEwNC41IDExMS4wIEwgODcuNSA2Ni4wIEwgODguNSA0NC4wIEwgOTguMCAyOC41IEwgMTM4LjAgMjEuNSBMIDEwMzguMCAyMS41IEwgMTA1NS41IDI4LjAgTCAxMDYxLjUgNDQuMCBMIDEwNTcuNSA3MTcuMCBMIDEwMzEuMCA3NTAuNSBMIDkxMS4wIDgzOC41IEwgODM4LjAgODgwLjUgTCA3ODMuMCA4OTUuNSBaIi8+CiAgPHBhdGggZD0iTSAxNTguMCAxMTg5LjUgTCAzOC4wIDExODguNSBMIDI1LjUgMTE4MC4wIEwgMjEuNSAxMTY5LjAgTCAyMS41IDQzOC4wIEwgMjkuMCA0MDguNSBMIDU3LjUgNDMxLjAgTCA0NDEuNSA5MTYuMCBMIDUzNi41IDEwNTIuMCBMIDU2NC41IDExMTkuMCBMIDU1Ny41IDExNjEuMCBMIDU0My4wIDExNzYuNSBMIDUyMi4wIDExODUuNSBMIDE1OC4wIDExODkuNSBaIi8+CiAgPHBhdGggZD0iTSA2NTcuMCAxMTg3LjUgTCA2MTMuMCAxMTg1LjUgTCA2MDMuNSAxMTczLjAgTCA2NzUuMCAxMTEzLjUgTCA5NjEuMCA5MTEuNSBMIDEwMzMuMCA4NjIuNSBMIDEwNTMuNSA4NjEuMCBMIDEwNTkuNSA4ODUuMCBMIDEwNjAuNSAxMTE1LjAgTCAxMDU5LjUgMTE2Ni4wIEwgMTA1Mi4wIDExODEuNSBMIDEwMzguMCAxMTg2LjUgTCA2NTcuMCAxMTg3LjUgWiIvPgo8L3N2Zz4=" alt="" />
+      <span class="nav-brand-text">Lexnavigator</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#reviews"   class="nav-link" data-ua="Клієнти"      data-en="Clients">Клієнти</a>
+      <a href="#expertise" class="nav-link" data-ua="Експертиза"   data-en="Expertise">Експертиза</a>
+      <a href="#contact"   class="nav-link" data-ua="Контакти"     data-en="Contact">Контакти</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="lang-sep">
+        <button data-l="ua" class="on">UA</button>
+        <span class="div">/</span>
+        <button data-l="en">EN</button>
+      </div>
+      <button class="hamburger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div id="mobile-menu">
+  <a href="#reviews"   data-ua="Клієнти"    data-en="Clients">Клієнти</a>
+  <a href="#expertise" data-ua="Експертиза" data-en="Expertise">Експертиза</a>
+  <a href="#contact"   data-ua="Контакти"   data-en="Contact">Контакти</a>
+  <a href="#"          data-consult data-ua="Консультація" data-en="Consultation">Консультація</a>
+</div>
+
+<!-- ═════ HERO ═════ -->
+<section id="hero" data-i="top">
+  <div class="hero-inner">
+
+    <!-- Only the shield, no background color -->
+    <div class="hero-shield">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDgzIDEyMTAiIGZpbGw9IiMxZTJlNGQiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgPHBhdGggZD0iTSA3ODMuMCA4OTUuNSBMIDczMy4wIDg4MS41IEwgNjcwLjUgODI1LjAgTCAyMjIuNSAyNzEuMCBMIDEwNC41IDExMS4wIEwgODcuNSA2Ni4wIEwgODguNSA0NC4wIEwgOTguMCAyOC41IEwgMTM4LjAgMjEuNSBMIDEwMzguMCAyMS41IEwgMTA1NS41IDI4LjAgTCAxMDYxLjUgNDQuMCBMIDEwNTcuNSA3MTcuMCBMIDEwMzEuMCA3NTAuNSBMIDkxMS4wIDgzOC41IEwgODM4LjAgODgwLjUgTCA3ODMuMCA4OTUuNSBaIi8+CiAgPHBhdGggZD0iTSAxNTguMCAxMTg5LjUgTCAzOC4wIDExODguNSBMIDI1LjUgMTE4MC4wIEwgMjEuNSAxMTY5LjAgTCAyMS41IDQzOC4wIEwgMjkuMCA0MDguNSBMIDU3LjUgNDMxLjAgTCA0NDEuNSA5MTYuMCBMIDUzNi41IDEwNTIuMCBMIDU2NC41IDExMTkuMCBMIDU1Ny41IDExNjEuMCBMIDU0My4wIDExNzYuNSBMIDUyMi4wIDExODUuNSBMIDE1OC4wIDExODkuNSBaIi8+CiAgPHBhdGggZD0iTSA2NTcuMCAxMTg3LjUgTCA2MTMuMCAxMTg1LjUgTCA2MDMuNSAxMTczLjAgTCA2NzUuMCAxMTEzLjUgTCA5NjEuMCA5MTEuNSBMIDEwMzMuMCA4NjIuNSBMIDEwNTMuNSA4NjEuMCBMIDEwNTkuNSA4ODUuMCBMIDEwNjAuNSAxMTE1LjAgTCAxMDU5LjUgMTE2Ni4wIEwgMTA1Mi4wIDExODEuNSBMIDEwMzguMCAxMTg2LjUgTCA2NTcuMCAxMTg3LjUgWiIvPgo8L3N2Zz4=" alt="Lexnavigator shield" />
+    </div>
+
+    <!-- Name: letter-by-letter word animation -->
+    <div class="hero-wordmark" id="wordmark">
+      <span class="word">Lexnavigator</span>
+      <span class="word">Law</span>
+      <span class="word">Group</span>
+    </div>
+
+    <!-- Slogan from logo -->
+    <div class="hero-slogan" data-ua="Attorneys &amp; Counselors at Law"
+                              data-en="Attorneys &amp; Counselors at Law">
+      Attorneys &amp; Counselors at Law
+    </div>
+
+    <p class="hero-lead reveal delay-3"
+       data-ua="Стратегічні рішення для складних справ. Корпоративне право, судова практика, приватний капітал і комплаєнс — під персональним супроводом партнера."
+       data-en="Strategic solutions for complex matters. Corporate law, disputes, private wealth, and compliance — partner-led from start to finish.">
+      Стратегічні рішення для складних справ. Корпоративне право, судова практика, приватний капітал і комплаєнс — під персональним супроводом партнера.
+    </p>
+
+    <div class="hero-actions reveal delay-4">
+      <a href="#" class="btn btn-primary" data-consult data-magnetic>
+        <span data-ua="Записатися на зустріч" data-en="Book a meeting">Записатися на зустріч</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      <a href="#expertise" class="btn btn-ghost">
+        <span data-ua="Наші практики" data-en="Our practices">Наші практики</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="scroll-cue" data-ua="Далі" data-en="Scroll">Далі</div>
+</section>
+
+<!-- ═════ MARQUEE — editorial-style SVG wordmarks ═════ -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <!-- Forbes — serif, strong weight -->
+    <span class="marquee-item" aria-label="Forbes">
+      <svg viewBox="0 0 110 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="600" font-size="26" letter-spacing="-0.01em">Forbes</text>
+      </svg>
+    </span>
+    <!-- Reuters — sans, condensed -->
+    <span class="marquee-item" aria-label="Reuters">
+      <svg viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="22" font-family="Inter, sans-serif" font-weight="700" font-size="21" letter-spacing="-0.02em">REUTERS</text>
+      </svg>
+    </span>
+    <!-- Chambers — classical small-caps -->
+    <span class="marquee-item" aria-label="Chambers &amp; Partners">
+      <svg viewBox="0 0 150 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="21" font-family="Cormorant Garamond, serif" font-weight="500" font-size="20" letter-spacing="0.12em" font-variant="small-caps">Chambers</text>
+      </svg>
+    </span>
+    <!-- Legal 500 — modern condensed -->
+    <span class="marquee-item" aria-label="The Legal 500">
+      <svg viewBox="0 0 130 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="21" font-family="Inter, sans-serif" font-weight="600" font-size="19" letter-spacing="0.22em">LEGAL</text>
+        <text x="78" y="21" font-family="Cormorant Garamond, serif" font-weight="500" font-size="22" font-style="italic">500</text>
+      </svg>
+    </span>
+    <!-- IFLR1000 — minimal modern -->
+    <span class="marquee-item" aria-label="IFLR1000">
+      <svg viewBox="0 0 100 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="21" font-family="Inter, sans-serif" font-weight="700" font-size="20" letter-spacing="0.04em">IFLR</text>
+        <text x="56" y="21" font-family="Inter, sans-serif" font-weight="300" font-size="20" letter-spacing="0.04em">1000</text>
+      </svg>
+    </span>
+    <!-- Best Lawyers — elegant italic -->
+    <span class="marquee-item" aria-label="Best Lawyers">
+      <svg viewBox="0 0 170 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="500" font-style="italic" font-size="22" letter-spacing="0.01em">Best Lawyers</text>
+      </svg>
+    </span>
+    <!-- L'Echo — editorial italic w/ acute -->
+    <span class="marquee-item" aria-label="L'Echo">
+      <svg viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="600" font-style="italic" font-size="24" letter-spacing="0.005em">L&#8217;Echo</text>
+      </svg>
+    </span>
+
+    <!-- Duplicate set for seamless loop -->
+    <span class="marquee-item" aria-label="Forbes">
+      <svg viewBox="0 0 110 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="600" font-size="26" letter-spacing="-0.01em">Forbes</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="Reuters">
+      <svg viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter, sans-serif" font-weight="700" font-size="21" letter-spacing="-0.02em">REUTERS</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="Chambers">
+      <svg viewBox="0 0 150 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="21" font-family="Cormorant Garamond, serif" font-weight="500" font-size="20" letter-spacing="0.12em" font-variant="small-caps">Chambers</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="Legal 500">
+      <svg viewBox="0 0 130 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="21" font-family="Inter, sans-serif" font-weight="600" font-size="19" letter-spacing="0.22em">LEGAL</text><text x="78" y="21" font-family="Cormorant Garamond, serif" font-weight="500" font-size="22" font-style="italic">500</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="IFLR1000">
+      <svg viewBox="0 0 100 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="21" font-family="Inter, sans-serif" font-weight="700" font-size="20" letter-spacing="0.04em">IFLR</text><text x="56" y="21" font-family="Inter, sans-serif" font-weight="300" font-size="20" letter-spacing="0.04em">1000</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="Best Lawyers">
+      <svg viewBox="0 0 170 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="500" font-style="italic" font-size="22" letter-spacing="0.01em">Best Lawyers</text></svg>
+    </span>
+    <span class="marquee-item" aria-label="L'Echo">
+      <svg viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Cormorant Garamond, serif" font-weight="600" font-style="italic" font-size="24" letter-spacing="0.005em">L&#8217;Echo</text></svg>
+    </span>
+  </div>
+</div>
+
+<!-- ═════ REVIEWS ═════ (moved up, дано заказчику акцент) -->
+<section id="reviews">
+  <div class="reviews-inner">
+
+    <div class="reviews-head reveal">
+      <span class="eyebrow" data-ua="Клієнти" data-en="Clients">Клієнти</span>
+      <h2 data-ua="Що кажуть про нас<em>.</em>" data-en="What they say<em>.</em>">
+        Що кажуть про нас<em>.</em>
+      </h2>
+    </div>
+
+    <div class="rv-track reveal delay-1">
+      <div class="rv-slides" id="rvSlides">
+
+        <div class="rv-slide">
+          <div class="rv-card">
+            <div class="rv-avatar">АГ</div>
+            <div class="rv-stars">
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+            </div>
+            <p class="rv-quote"
+               data-ua="Lex Navigator — це не просто юристи, це стратегічні партнери, які бачать рішення там, де інші бачать лише ризики. Найвищий рівень дискреції."
+               data-en="Lex Navigator is not just lawyers — they are strategic partners who see solutions where others see only risks. The highest level of discretion.">
+              Lex Navigator — це не просто юристи, це стратегічні партнери, які бачать рішення там, де інші бачать лише ризики. Найвищий рівень дискреції.
+            </p>
+            <div class="rv-attr" data-ua="А. Г." data-en="A. G.">А. Г.</div>
+            <div class="rv-attr-sub" data-ua="CEO · International Holding" data-en="CEO · International Holding">CEO · International Holding</div>
+          </div>
+        </div>
+
+        <div class="rv-slide">
+          <div class="rv-card">
+            <div class="rv-avatar">МК</div>
+            <div class="rv-stars">
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+            </div>
+            <p class="rv-quote"
+               data-ua="Ми працюємо разом понад вісім років. Жодного разу не довелось повертатися до вже вирішеного питання. Це рідкість у нашій індустрії."
+               data-en="We have worked together for over eight years. Not once have we had to return to a matter already resolved. This is rare in our industry.">
+              Ми працюємо разом понад вісім років. Жодного разу не довелось повертатися до вже вирішеного питання. Це рідкість у нашій індустрії.
+            </p>
+            <div class="rv-attr" data-ua="М. К." data-en="M. K.">М. К.</div>
+            <div class="rv-attr-sub" data-ua="Засновник · Private Equity" data-en="Founder · Private Equity">Засновник · Private Equity</div>
+          </div>
+        </div>
+
+        <div class="rv-slide">
+          <div class="rv-card">
+            <div class="rv-avatar">ДР</div>
+            <div class="rv-stars">
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+              <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 17,14 19,22 12,17 5,22 7,14 2,9 9,9"/></svg>
+            </div>
+            <p class="rv-quote"
+               data-ua="У міжнародному арбітражі їхня команда працювала проти партнерів Magic Circle — і виграла. Рекомендую без застережень."
+               data-en="In international arbitration, their team worked against Magic Circle partners — and won. I recommend them without reservation.">
+              У міжнародному арбітражі їхня команда працювала проти партнерів Magic Circle — і виграла. Рекомендую без застережень.
+            </p>
+            <div class="rv-attr" data-ua="Д. Р." data-en="D. R.">Д. Р.</div>
+            <div class="rv-attr-sub" data-ua="Chairman · Industrial Group" data-en="Chairman · Industrial Group">Chairman · Industrial Group</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rv-nav">
+      <button class="rv-btn" id="rvPrev" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="rv-dots" id="rvDots"></div>
+      <button class="rv-btn primary" id="rvNext" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════ UVP — numbers with animated counters ═════ -->
+<section id="uvp-section">
+  <div class="container">
+
+    <div class="uvp-head reveal">
+      <h3 data-ua="Дванадцять років практики<em>.</em>" data-en="Twelve years of practice<em>.</em>">
+        Дванадцять років практики<em>.</em>
+      </h3>
+    </div>
+
+    <div class="uvp-grid reveal">
+      <div class="uvp-cell">
+        <div class="uvp-num"><span class="count" data-target="12" data-suffix="+">0</span></div>
+        <div class="uvp-label" data-ua="Років практики" data-en="Years in practice">Років практики</div>
+      </div>
+      <div class="uvp-cell">
+        <div class="uvp-num"><span class="count" data-target="340">0</span></div>
+        <div class="uvp-label" data-ua="Закритих справ" data-en="Closed matters">Закритих справ</div>
+      </div>
+      <div class="uvp-cell">
+        <div class="uvp-num"><span class="count-currency">€&nbsp;<span class="count" data-target="1.8" data-decimals="1">0</span></span><em>Bn</em></div>
+        <div class="uvp-label" data-ua="Вартість угод" data-en="Aggregate deal value">Вартість угод</div>
+      </div>
+      <div class="uvp-cell">
+        <div class="uvp-num"><span class="count" data-target="96">0</span><em>%</em></div>
+        <div class="uvp-label" data-ua="Успішних рішень" data-en="Favorable outcomes">Успішних рішень</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ CONTACT ═════ (перед експертизою, info слева / map справа) -->
+<section id="contact">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <h2 data-ua="Зв'яжіться з нами<em>.</em>" data-en="Get in touch<em>.</em>">Зв'яжіться з нами<em>.</em></h2>
+      <div class="gold-rule"></div>
+      <p class="sec-lead"
+         data-ua="Перша консультація — конфіденційна та без зобов'язань. Відповідаємо впродовж робочого дня."
+         data-en="First consultation is confidential and without obligation. We respond within the business day.">
+        Перша консультація — конфіденційна та без зобов'язань.
+      </p>
+    </div>
+
+    <div class="contact-layout reveal">
+
+      <!-- LEFT: contact info -->
+      <div class="contact-info">
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-ua="Адреса" data-en="Address">Адреса</div>
+            <a href="https://maps.google.com/?q=Volodymyrska+12+Kyiv" target="_blank" rel="noopener" class="contact-row-value"
+               data-ua="вул. Володимирська 12, Київ"
+               data-en="12 Volodymyrska Str., Kyiv">вул. Володимирська 12, Київ</a>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-ua="Телефон" data-en="Phone">Телефон</div>
+            <a href="tel:+380441234567" class="contact-row-value">+380 44 123 45 67</a>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <div class="contact-row-label">Email</div>
+            <a href="mailto:office@lexnavigator.ua" class="contact-row-value">office@lexnavigator.ua</a>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          <div class="contact-row-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <div class="contact-row-body">
+            <div class="contact-row-label" data-ua="Прийом" data-en="Hours">Прийом</div>
+            <span class="contact-row-value"
+                  data-ua="Пн–Пт · 09:00 — 19:00"
+                  data-en="Mon–Fri · 09:00 — 19:00">Пн–Пт · 09:00 — 19:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: smaller map -->
+      <div class="contact-map-small">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2540.635832747167!2d30.51737431573215!3d50.45718797947656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce50f9b6e0c3%3A0x838380e2251a37c5!2z0LLRg9C70LjRhtGPINCS0L7Qu9C_0LTQuNC80LjRgNGB0YzQutCwLCAxMiwg0JrQuNGX0LIsIDAyMDAw!5e0!3m2!1suk!2sua!4v1650000000000!5m2!1suk!2sua"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════ EXPERTISE ═════ -->
+<section id="expertise" class="section">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <span class="eyebrow" data-ua="Наші практики" data-en="Our practices">Наші практики</span>
+      <h2 data-ua="Чим ми займаємось<em>.</em>" data-en="What we do<em>.</em>">Чим ми займаємось<em>.</em></h2>
+      <div class="gold-rule"></div>
+      <p class="sec-lead"
+         data-ua="Шість напрямів практики. Кожна справа — під персональним супроводом партнера."
+         data-en="Six practice areas. Every matter — partner-led from start to finish.">
+        Шість напрямів практики. Кожна справа — під персональним супроводом партнера.
+      </p>
+    </div>
+
+    <div class="ex-grid reveal">
+
+      <!-- 01. Судові спори / Litigation -->
+      <article class="ex-item" data-ex="litigation">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"/>
+            <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>
+            <path d="M7 21h10"/>
+            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Судові спори" data-en="Litigation">Судові спори</h3>
+        <p class="ex-desc"
+           data-ua="Вирішення суперечок між суб'єктами господарської діяльності на всіх рівнях інстанцій."
+           data-en="Resolving disputes between business entities at every level of court jurisdiction.">
+          Вирішення суперечок між суб'єктами господарської діяльності на всіх рівнях інстанцій.
+        </p>
+        <button class="ex-more" data-ex="litigation">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+      <!-- 02. Захист у кримінальних справах / Criminal Defense -->
+      <article class="ex-item" data-ex="criminal">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Захист у кримінальних справах" data-en="Criminal Defense">Захист у кримінальних справах</h3>
+        <p class="ex-desc"
+           data-ua="Професійний захист ваших інтересів у кримінальних провадженнях на всіх стадіях."
+           data-en="Professional defense of your interests in criminal proceedings at every stage.">
+          Професійний захист ваших інтересів у кримінальних провадженнях на всіх стадіях.
+        </p>
+        <button class="ex-more" data-ex="criminal">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+      <!-- 03. Стягнення заборгованості / Debt Recovery -->
+      <article class="ex-item" data-ex="debt">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <circle cx="12" cy="12" r="2.5"/>
+            <path d="M6 12h.01M18 12h.01"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Стягнення заборгованості" data-en="Debt Recovery">Стягнення заборгованості</h3>
+        <p class="ex-desc"
+           data-ua="Представництво та захист інтересів клієнта у процедурах стягнення боргів."
+           data-en="Representation and protection of the client's interests in debt recovery proceedings.">
+          Представництво та захист інтересів клієнта у процедурах стягнення боргів.
+        </p>
+        <button class="ex-more" data-ex="debt">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+      <!-- 04. Банкрутство / Bankruptcy -->
+      <article class="ex-item" data-ex="bankruptcy">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/>
+            <path d="M5 21V8l7-5 7 5v13"/>
+            <path d="M9 21v-6h6v6"/>
+            <path d="M10 10h4"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Банкрутство" data-en="Bankruptcy">Банкрутство</h3>
+        <p class="ex-desc"
+           data-ua="Грамотний юридичний супровід процедури банкрутства може стати точкою нового розвитку."
+           data-en="Competent legal guidance through bankruptcy procedures can become a new starting point.">
+          Грамотний юридичний супровід процедури банкрутства може стати точкою нового розвитку.
+        </p>
+        <button class="ex-more" data-ex="bankruptcy">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+      <!-- 05. Нерухомість та земельне право / Real Estate & Land -->
+      <article class="ex-item" data-ex="realestate">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Нерухомість та земельне право" data-en="Real Estate &amp; Land Law">Нерухомість та земельне право</h3>
+        <p class="ex-desc"
+           data-ua="Юридичний супровід угод з нерухомістю, земельних питань та містобудівної документації."
+           data-en="Legal support for real estate transactions, land matters, and zoning documentation.">
+          Юридичний супровід угод з нерухомістю, земельних питань та містобудівної документації.
+        </p>
+        <button class="ex-more" data-ex="realestate">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+      <!-- 06. Інвестиції / Investments -->
+      <article class="ex-item" data-ex="investments">
+        <div class="ex-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+            <polyline points="16 7 22 7 22 13"/>
+          </svg>
+        </div>
+        <h3 class="ex-title" data-ua="Інвестиції" data-en="Investments">Інвестиції</h3>
+        <p class="ex-desc"
+           data-ua="Юридичний супровід інвестиційних проектів — невід'ємна складова успішної реалізації."
+           data-en="Legal guidance on investment projects — an essential component of successful execution.">
+          Юридичний супровід інвестиційних проектів — невід'ємна складова успішної реалізації.
+        </p>
+        <button class="ex-more" data-ex="investments">
+          <span data-ua="Дізнатись більше" data-en="Learn more">Дізнатись більше</span>
+          <span class="arrow">→</span>
+        </button>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════ FOOTER ═════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-text">Lexnavigator</div>
+        <div class="footer-brand-sub">Attorneys &amp; Counselors at Law</div>
+        <p class="footer-descr"
+           data-ua="Адвокатське бюро у центрі Києва. Корпоративне право, судова практика, приватний капітал, комплаєнс."
+           data-en="Law firm in central Kyiv. Corporate, disputes, private wealth, compliance.">
+          Адвокатське бюро у центрі Києва. Корпоративне право, судова практика, приватний капітал, комплаєнс.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-ua="Практики" data-en="Practices">Практики</div>
+        <ul>
+          <li><a href="#expertise" data-ua="Корпоративне право" data-en="Corporate Law">Корпоративне право</a></li>
+          <li><a href="#expertise" data-ua="Судова практика" data-en="Disputes">Судова практика</a></li>
+          <li><a href="#expertise" data-ua="Приватний капітал" data-en="Private Wealth">Приватний капітал</a></li>
+          <li><a href="#expertise" data-ua="Комплаєнс" data-en="Compliance">Комплаєнс</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-ua="Компанія" data-en="Firm">Компанія</div>
+        <ul>
+          <li><a href="#reviews" data-ua="Клієнти" data-en="Clients">Клієнти</a></li>
+          <li><a href="#contact" data-ua="Контакти" data-en="Contact">Контакти</a></li>
+          <li><a href="#" data-ua="Конфіденційність" data-en="Privacy">Конфіденційність</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title" data-ua="Зв'язок" data-en="Reach us">Зв'язок</div>
+        <ul>
+          <li><a href="tel:+380441234567">+380 44 123 45 67</a></li>
+          <li><a href="mailto:office@lexnavigator.ua">office@lexnavigator.ua</a></li>
+          <li><a href="#contact" data-ua="вул. Володимирська 12" data-en="12 Volodymyrska Str.">вул. Володимирська 12</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Lexnavigator Law Group</span>
+      <span data-ua="Всі права захищені" data-en="All rights reserved">Всі права захищені</span>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /#site-content -->
+
+<!-- ═════ EXPERTISE DETAIL MODAL ═════ -->
+<div id="ex-overlay" role="dialog" aria-modal="true" aria-labelledby="ex-modal-title">
+  <div class="ex-card-modal">
+    <button class="ex-close" id="exClose" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="ex-modal-content">
+      <div class="ex-modal-icon" id="exModalIcon"></div>
+      <h3 class="ex-modal-title" id="exModalTitle"></h3>
+      <div class="ex-modal-body" id="exModalBody"></div>
+
+      <div class="ex-modal-cta">
+        <span class="ex-modal-cta-note"
+              data-ua="Готові обговорити вашу справу?"
+              data-en="Ready to discuss your matter?">
+          Готові обговорити вашу справу?
+        </span>
+        <button id="exModalBookBtn">
+          <span data-ua="Записатися на зустріч" data-en="Book a meeting">Записатися на зустріч</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════ CONSULTATION MODAL ═════ -->
+<div id="consult-overlay" role="dialog" aria-modal="true" aria-labelledby="consult-title">
+  <div class="consult-card">
+    <button class="consult-close" id="consultClose" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="consult-content">
+      <div class="consult-head">
+      <h3 id="consult-title"
+          data-ua="Записатися на <em>консультацію</em>"
+          data-en="Book a <em>consultation</em>">
+        Записатися на <em>консультацію</em>
+      </h3>
+      <p data-ua="Відповідаємо впродовж робочого дня. Без зобов'язань."
+         data-en="We reply within the business day. No obligation.">
+        Відповідаємо впродовж робочого дня. Без зобов'язань.
+      </p>
+    </div>
+
+    <form class="consult-form" id="consultForm" novalidate>
+      <div class="consult-row">
+        <div class="consult-field">
+          <label class="consult-label" for="cName"     data-ua="Ім'я"     data-en="First name">Ім'я</label>
+          <input class="consult-input" id="cName"  type="text" autocomplete="given-name"  placeholder="Іван" required>
+        </div>
+        <div class="consult-field">
+          <label class="consult-label" for="cSurname"  data-ua="Прізвище" data-en="Last name">Прізвище</label>
+          <input class="consult-input" id="cSurname" type="text" autocomplete="family-name" placeholder="Іваненко" required>
+        </div>
+      </div>
+
+      <div class="consult-field">
+        <label class="consult-label" for="cPhone"  data-ua="Телефон" data-en="Phone">Телефон</label>
+        <input class="consult-input" id="cPhone" type="tel" autocomplete="tel" placeholder="+380 __ ___ __ __" required>
+      </div>
+
+      <div class="consult-field">
+        <label class="consult-label" for="cReason" data-ua="Коротко про справу" data-en="Brief about the matter">Коротко про справу</label>
+        <textarea class="consult-textarea" id="cReason" rows="3" placeholder="..." required></textarea>
+      </div>
+
+      <button class="consult-submit" type="submit" id="consultSubmit">
+        <span data-ua="Надіслати запит" data-en="Send request">Надіслати запит</span>
+        <span class="btn-arrow">→</span>
+      </button>
+
+      <div class="consult-meta" data-ua="Конфіденційно · Без спаму" data-en="Confidential · No spam">
+        Конфіденційно · Без спаму
+      </div>
+    </form>
+    </div><!-- /.consult-content -->
+  </div>
+</div>
+
+<!-- ═════ FLOATING CTA ═════ -->
+<a href="#" id="cta" data-consult data-magnetic>
+  <span id="cta-dot"></span>
+  <span data-ua="Консультація" data-en="Consultation">Консультація</span>
+</a>
+
+<!-- ═════ JS ═════ -->
+<script>
+(function(){
+  'use strict';
+
+  /* ── Nav scroll state ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── Hamburger menu ── */
+  const burger = document.getElementById('burger');
+  burger.addEventListener('click', () => {
+    document.body.classList.toggle('menu-open');
+  });
+  document.querySelectorAll('#mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => document.body.classList.remove('menu-open'));
+  });
+
+  /* ── Reveal on scroll ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ── Hero wordmark stagger animation ── */
+  setTimeout(() => {
+    document.getElementById('wordmark').classList.add('in');
+  }, 250);
+
+  /* ── Language toggle ── */
+  let lang = 'ua';
+  function applyLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-sep button').forEach(b => {
+      b.classList.toggle('on', b.dataset.l === l);
+    });
+    document.querySelectorAll('[data-ua]').forEach(el => {
+      const t = el.getAttribute('data-' + l);
+      if (t !== null) el.innerHTML = t;
+    });
+    document.documentElement.lang = l === 'ua' ? 'uk' : 'en';
+    // If expertise modal is open, refresh its content in new language
+    try {
+      const k = document.getElementById('ex-overlay').dataset.key;
+      if (k && typeof EX_DATA !== 'undefined' && EX_DATA[k]) {
+        const pack = EX_DATA[k][l] || EX_DATA[k].ua;
+        document.getElementById('exModalTitle').textContent = pack.title;
+        document.getElementById('exModalBody').innerHTML   = pack.body;
+      }
+    } catch(_) {}
+    try { localStorage.setItem('lex.lang', l); } catch(_) {}
+  }
+  document.querySelectorAll('.lang-sep button').forEach(b => {
+    b.addEventListener('click', () => applyLang(b.dataset.l));
+  });
+  try { const s = localStorage.getItem('lex.lang'); if (s) applyLang(s); } catch(_) {}
+
+  /* ── Smooth anchor scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.length > 1 && document.querySelector(id)) {
+        e.preventDefault();
+        document.querySelector(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* ── Reviews — infinite peek carousel ──
+     Technique: clone slides 3x. Track layout: [clones] [originals] [clones].
+     Active index points into the middle band. When user goes past boundary,
+     we silently teleport to the equivalent middle position (no transition).
+  */
+  (function(){
+    const rvSlides  = document.getElementById('rvSlides');
+    const rvDots    = document.getElementById('rvDots');
+    const rvSection = document.getElementById('reviews');
+    const originals = Array.from(rvSlides.children);
+    const N = originals.length;
+    if (!N) return;
+
+    // Clone the set before and after. Total = 3N slides in DOM.
+    const preClones  = originals.map(s => { const c = s.cloneNode(true); c.dataset.clone = 'pre';  return c; });
+    const postClones = originals.map(s => { const c = s.cloneNode(true); c.dataset.clone = 'post'; return c; });
+    // Prepend preClones (in reverse? — no, same order) and append postClones
+    preClones.reverse().forEach(c => rvSlides.insertBefore(c, rvSlides.firstChild));
+    postClones.forEach(c => rvSlides.appendChild(c));
+
+    const allSlides = Array.from(rvSlides.children);   // 3N total
+    // Virtual index into allSlides. Start in the middle band, position 0 of originals.
+    let pos = N;  // allSlides[N..2N-1] are the originals
+    let auto;
+
+    // Build dots (still N for UX simplicity)
+    originals.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'rv-dot' + (i === 0 ? ' on' : '');
+      d.setAttribute('aria-label', `Slide ${i+1}`);
+      d.addEventListener('click', () => goTo(N + i));
+      rvDots.appendChild(d);
+    });
+    const dotEls = Array.from(rvDots.children);
+
+    function measure() {
+      const slideW = allSlides[0].offsetWidth;
+      const style  = getComputedStyle(rvSlides);
+      const gap    = parseFloat(style.gap) || 20;
+      return { slideW, gap };
+    }
+
+    function applyTransform(useTransition) {
+      const { slideW, gap } = measure();
+      rvSlides.style.transition = useTransition
+        ? 'transform 0.7s cubic-bezier(0.2,0.8,0.2,1)'
+        : 'none';
+      rvSlides.style.transform = `translateX(${-pos * (slideW + gap)}px)`;
+
+      // Update visual state on all slides
+      allSlides.forEach((s, n) => {
+        s.classList.remove('active', 'adjacent');
+        if (n === pos) s.classList.add('active');
+        else if (n === pos - 1 || n === pos + 1) s.classList.add('adjacent');
+      });
+      // Update dots from real index (pos mod N, offset by N)
+      const realIdx = ((pos - N) % N + N) % N;
+      dotEls.forEach((d, n) => d.classList.toggle('on', n === realIdx));
+    }
+
+    function goTo(newPos) {
+      pos = newPos;
+      applyTransform(true);
+      resetAuto();
+    }
+
+    // After each transition, check if we're in a clone band and teleport silently
+    rvSlides.addEventListener('transitionend', () => {
+      if (pos < N) {
+        // Fell into pre-clones → jump forward N
+        pos += N;
+        applyTransform(false);
+      } else if (pos >= 2 * N) {
+        // Fell into post-clones → jump backward N
+        pos -= N;
+        applyTransform(false);
+      }
+    });
+
+    function resetAuto() {
+      clearInterval(auto);
+      auto = setInterval(() => goTo(pos + 1), 7500);
+    }
+
+    // Controls
+    document.getElementById('rvPrev').addEventListener('click', () => goTo(pos - 1));
+    document.getElementById('rvNext').addEventListener('click', () => goTo(pos + 1));
+
+    // Click on any visible slide to focus it
+    allSlides.forEach((s, i) => {
+      s.addEventListener('click', () => { if (i !== pos) goTo(i); });
+    });
+
+    // Touch swipe (mobile + trackpad)
+    let sx = null, sy = null, dragging = false, currentX = 0;
+    const threshold = 40;
+
+    rvSlides.addEventListener('touchstart', (e) => {
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      dragging = true;
+      clearInterval(auto);
+    }, { passive: true });
+
+    rvSlides.addEventListener('touchmove', (e) => {
+      if (!dragging || sx === null) return;
+      currentX = e.touches[0].clientX - sx;
+    }, { passive: true });
+
+    rvSlides.addEventListener('touchend', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) goTo(pos + 1);
+        else        goTo(pos - 1);
+      } else {
+        resetAuto();
+      }
+      sx = sy = null;
+    }, { passive: true });
+
+    // Pause auto on hover (desktop)
+    rvSection.addEventListener('mouseenter', () => clearInterval(auto));
+    rvSection.addEventListener('mouseleave', resetAuto);
+
+    // Initial paint
+    applyTransform(false);
+    // Kick visual state in one tick so transition is off for first frame
+    requestAnimationFrame(() => applyTransform(false));
+    resetAuto();
+
+    // Re-measure on resize
+    let resizeT;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(() => applyTransform(false), 150);
+    }, { passive: true });
+  })();
+
+  /* ── Animated counters ── */
+  function animateCount(el) {
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - start) / duration);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      const v = target * eased;
+      el.textContent = (decimals ? v.toFixed(decimals) : Math.floor(v)) + suffix;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCount(e.target);
+        countObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.count').forEach(el => countObs.observe(el));
+
+  /* ── Expertise detail modal ── */
+  const exOverlay     = document.getElementById('ex-overlay');
+  const exClose       = document.getElementById('exClose');
+  const exModalIcon   = document.getElementById('exModalIcon');
+  const exModalTitle  = document.getElementById('exModalTitle');
+  const exModalBody   = document.getElementById('exModalBody');
+  const exModalBookBtn= document.getElementById('exModalBookBtn');
+
+  const EX_DATA = {
+    litigation: {
+      ua: {
+        title: "Судові спори",
+        body:
+          "<p>Висококваліфіковані фахівці нашої компанії допоможуть вирішити суперечки між суб'єктами господарської діяльності на всіх рівнях судових інстанцій. Ми супроводжуємо клієнта від першої консультації до виконання рішення — з увагою до стратегії, доказової бази та комерційних інтересів.</p>" +
+          "<p>Кожна справа веде партнер. Ми готуємо процесуальну стратегію, узгоджуємо її з клієнтом, і тримаємо вас у курсі кожного значущого кроку.</p>" +
+          "<ul><li>Комерційні та господарські спори</li><li>Представництво у судах усіх інстанцій</li><li>Забезпечувальні заходи та термінові слухання</li><li>Виконавче провадження та стягнення</li><li>Міжнародний арбітраж (LCIA, ICC, SCC, VIAC)</li></ul>"
+      },
+      en: {
+        title: "Litigation",
+        body:
+          "<p>Our highly qualified specialists help resolve disputes between business entities at every level of court jurisdiction. We guide the client from the first consultation through enforcement of the judgment.</p>" +
+          "<p>Every matter is partner-led. We prepare a procedural strategy, align it with the client, and keep you informed at every meaningful step.</p>" +
+          "<ul><li>Commercial and corporate disputes</li><li>Representation at all levels of court</li><li>Injunctive relief and urgent hearings</li><li>Enforcement proceedings and debt collection</li><li>International arbitration (LCIA, ICC, SCC, VIAC)</li></ul>"
+      }
+    },
+    criminal: {
+      ua: {
+        title: "Захист у кримінальних справах",
+        body:
+          "<p>Адвокати юридичної компанії Лекснавігатор забезпечать професійний захист ваших інтересів у кримінальних провадженнях на всіх стадіях — від досудового розслідування до апеляційної та касаційної інстанцій.</p>" +
+          "<p>Ми спеціалізуємось на економічних та господарських злочинах, де юридична грамотність та своєчасність дій адвоката мають вирішальне значення.</p>" +
+          "<ul><li>Захист на стадії досудового розслідування</li><li>Представництво під час слідчих дій та допитів</li><li>Оскарження рішень слідчого</li><li>Захист у справах економічного характеру</li><li>Апеляційне та касаційне провадження</li></ul>"
+      },
+      en: {
+        title: "Criminal Defense",
+        body:
+          "<p>Lexnavigator attorneys provide professional defense of your interests in criminal proceedings at every stage — from pre-trial investigation through appellate and cassation courts.</p>" +
+          "<p>We specialize in economic and business-related crimes, where legal literacy and timeliness of the attorney's actions are decisive.</p>" +
+          "<ul><li>Defense at the pre-trial investigation stage</li><li>Representation during investigative actions and interrogations</li><li>Appeals against investigator decisions</li><li>Defense in economic crime cases</li><li>Appellate and cassation proceedings</li></ul>"
+      }
+    },
+    debt: {
+      ua: {
+        title: "Стягнення заборгованості",
+        body:
+          "<p>Виконання роботи по стягненню заборгованості полягає в представництві та захисті інтересів клієнта на досудовому етапі, у суді та під час виконавчого провадження.</p>" +
+          "<p>Ми пропонуємо комплексний підхід: від претензійної роботи до фактичного повернення коштів.</p>" +
+          "<ul><li>Досудове врегулювання та претензійна робота</li><li>Судове стягнення в порядку позовного провадження</li><li>Виконавче провадження та супровід виконавця</li><li>Оскарження фіктивних правочинів боржника</li><li>Транскордонне стягнення</li></ul>"
+      },
+      en: {
+        title: "Debt Recovery",
+        body:
+          "<p>Debt recovery work consists of representing and protecting the client's interests at the pre-trial stage, in court, and during enforcement proceedings.</p>" +
+          "<p>We offer a comprehensive approach: from claim letters to the actual return of funds.</p>" +
+          "<ul><li>Pre-trial settlement and claim correspondence</li><li>Court recovery in claim proceedings</li><li>Enforcement proceedings and bailiff supervision</li><li>Challenging fictitious transactions by the debtor</li><li>Cross-border recovery</li></ul>"
+      }
+    },
+    bankruptcy: {
+      ua: {
+        title: "Банкрутство",
+        body:
+          "<p>Процедура банкрутства підприємства, за умови грамотного юридичного супроводу, може стати новою точкою відліку у розвитку бізнесу — або інструментом захисту від необґрунтованих вимог кредиторів.</p>" +
+          "<p>Ми супроводжуємо як боржників, так і кредиторів, виходячи з комерційної логіки клієнта.</p>" +
+          "<ul><li>Супровід боржника у процедурі банкрутства</li><li>Представництво кредитора, захист вимог у реєстрі</li><li>Санація та реструктуризація заборгованості</li><li>Оскарження угод боржника</li><li>Супровід банкрутства фізичних осіб</li></ul>"
+      },
+      en: {
+        title: "Bankruptcy",
+        body:
+          "<p>Insolvency proceedings, with competent legal guidance, can become a new starting point for business development — or a tool to protect against unfounded creditor claims.</p>" +
+          "<p>We support both debtors and creditors, always operating from the client's commercial logic.</p>" +
+          "<ul><li>Debtor representation in bankruptcy proceedings</li><li>Creditor representation and claim protection</li><li>Rehabilitation and debt restructuring</li><li>Challenging debtor's transactions</li><li>Individual bankruptcy guidance</li></ul>"
+      }
+    },
+    realestate: {
+      ua: {
+        title: "Нерухомість та земельне право",
+        body:
+          "<p>В умовах сьогодення необхідність юридичного супроводу виникає у багатьох сферах діяльності. Не виключенням є угоди з нерухомістю та земельні питання — одна помилка в документах може коштувати клієнту активу.</p>" +
+          "<p>Ми перевіряємо правовий стан об'єкта, супроводжуємо угоду до реєстрації права власності.</p>" +
+          "<ul><li>Юридичний супровід купівлі-продажу нерухомості</li><li>Перевірка правового статусу об'єкта (Due Diligence)</li><li>Земельні спори та оскарження меж</li><li>Зміна цільового призначення землі</li><li>Супровід будівництва та містобудівна документація</li></ul>"
+      },
+      en: {
+        title: "Real Estate & Land Law",
+        body:
+          "<p>Real-estate transactions and land matters require careful legal support — a single document error can cost the client an asset.</p>" +
+          "<p>We verify the legal status of the object and guide the transaction through to registration of ownership.</p>" +
+          "<ul><li>Legal support for real-estate purchase and sale</li><li>Legal status verification (Due Diligence)</li><li>Land disputes and boundary challenges</li><li>Change of land-use purpose and category</li><li>Construction support and zoning documentation</li></ul>"
+      }
+    },
+    investments: {
+      ua: {
+        title: "Інвестиції",
+        body:
+          "<p>Юридичний супровід інвестиційного проекту — невід'ємна складова його успішної реалізації. Фахівці адвокатського об'єднання супроводжують інвестиції на всіх етапах: від структурування до захисту інтересів у разі спорів.</p>" +
+          "<p>Ми працюємо як з іноземними інвесторами, що входять на ринок, так і з українським бізнесом, що інвестує за кордоном.</p>" +
+          "<ul><li>Структурування інвестиції та вибір юрисдикції</li><li>Юридичний due diligence об'єкта інвестування</li><li>Підготовка інвестиційних угод (SPA, SHA, JV)</li><li>Захист прав іноземних інвесторів</li><li>Супровід виходу з інвестиції (exit strategy)</li></ul>"
+      },
+      en: {
+        title: "Investments",
+        body:
+          "<p>Legal support for an investment project is an essential component of its successful execution. The firm's specialists guide investments through every stage: from structuring and due diligence to protecting the investor's interests in disputes.</p>" +
+          "<p>We work with both foreign investors entering the Ukrainian market and with Ukrainian businesses investing abroad.</p>" +
+          "<ul><li>Investment structuring and jurisdiction selection</li><li>Legal due diligence of the investment object</li><li>Drafting of investment agreements (SPA, SHA, JV)</li><li>Protection of foreign investor rights</li><li>Exit-strategy guidance</li></ul>"
+      }
+    }
+  };
+
+  /* ─ Open / close helpers ─────────────────────────────────── */
+  function openExModal(key) {
+    const entry = EX_DATA[key];
+    if (!entry) return;
+    const srcSvg = document.querySelector(`.ex-item[data-ex="${key}"] .ex-icon svg`);
+    exModalIcon.innerHTML = srcSvg ? srcSvg.outerHTML : '';
+    const pack = entry[lang] || entry.ua;
+    exModalTitle.textContent = pack.title;
+    exModalBody.innerHTML    = pack.body;
+    exOverlay.dataset.key = key;
+    document.body.classList.remove('menu-open');
+    // Add .is-open to overlay → triggers CSS transitions
+    // Add .modal-open to body → depth-shift + overflow:hidden
+    exOverlay.classList.add('is-open');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeExModal() {
+    exOverlay.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    delete exOverlay.dataset.key;
+  }
+
+  /* ─ Wire expertise triggers ──────────────────────────────── */
+  document.querySelectorAll('[data-ex]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (el.tagName === 'BUTTON') e.stopPropagation();
+      openExModal(el.dataset.ex);
+    });
+  });
+  exClose.addEventListener('click', closeExModal);
+  exOverlay.addEventListener('click', e => { if (e.target === exOverlay) closeExModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && exOverlay.classList.contains('is-open')) closeExModal();
+  });
+  exModalBookBtn.addEventListener('click', () => {
+    closeExModal();
+    setTimeout(() => openConsult(), 300);
+  });
+
+  /* ── Consultation modal ──────────────────────────────────── */
+  const consultOverlay = document.getElementById('consult-overlay');
+  const consultClose   = document.getElementById('consultClose');
+  const consultForm    = document.getElementById('consultForm');
+  const consultSubmit  = document.getElementById('consultSubmit');
+
+  function openConsult() {
+    document.body.classList.remove('menu-open');
+    consultOverlay.classList.add('is-open');
+    document.body.classList.add('modal-open');
+    setTimeout(() => {
+      const first = document.getElementById('cName');
+      if (first) first.focus();
+    }, 480);
+  }
+
+  function closeConsult() {
+    consultOverlay.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+  }
+
+  /* ─ Wire consult triggers ────────────────────────────────── */
+  document.querySelectorAll('[data-consult]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openConsult(); });
+  });
+  consultClose.addEventListener('click', closeConsult);
+  consultOverlay.addEventListener('click', e => { if (e.target === consultOverlay) closeConsult(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && consultOverlay.classList.contains('is-open')) closeConsult();
+  });
+
+  /* ─ Lang switch: refresh expertise modal content if open ─── */
+  const _origApplyLang = applyLang;
+  // (handled inline below inside applyLang — reads exOverlay.dataset.key)
+
+  /* ─ Form submit ──────────────────────────────────────────── */
+  consultForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const txt = consultSubmit.querySelector('span:first-child');
+    const orig = txt.textContent;
+    consultSubmit.classList.add('success');
+    txt.textContent = lang === 'ua' ? 'Надіслано ✓' : 'Sent ✓';
+    setTimeout(() => {
+      closeConsult();
+      setTimeout(() => {
+        consultForm.reset();
+        consultSubmit.classList.remove('success');
+        txt.textContent = orig;
+      }, 600);
+    }, 1400);
+  });
+
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (canHover) {
+    document.querySelectorAll('[data-magnetic]').forEach(btn => {
+      const strength = 0.25;
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const dx = e.clientX - (rect.left + rect.width/2);
+        const dy = e.clientY - (rect.top + rect.height/2);
+        btn.style.transform = `translate(${dx * strength}px, ${dy * strength}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>
